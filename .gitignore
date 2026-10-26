@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+.DS_Store
+
+# Data is downloaded by src/data.py, not versioned
+data/*
+!data/.gitkeep
