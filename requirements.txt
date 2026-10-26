@@ -1,11 +1,16 @@
-numpy
-pandas
-scikit-learn
-lightgbm
-shap
-lime
-statsmodels
-matplotlib
-seaborn
-ucimlrepo
+# Minimum versions. The exact versions the project was tested with are in requirements-lock.txt
+numpy>=2.0
+pandas>=2.2
+scipy>=1.11
+scikit-learn>=1.5
+lightgbm>=4.3
+shap>=0.46
+lime>=0.2.0.1
+matplotlib>=3.8
+seaborn>=0.13
+joblib>=1.3
+ucimlrepo>=0.0.7
+tqdm
 jupyter
+nbconvert
+ipykernel
