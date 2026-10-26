@@ -19,3 +19,9 @@ def report(y_true, p, thr):
         "Precision": precision_score(y_true, p >= thr),
         "Recall": recall_score(y_true, p >= thr),
     }
+
+
+def threshold_for_recall(y_true, p, target=0.80):
+    """Largest threshold whose recall on (validation) data is >= target."""
+    ts = np.linspace(0.01, 0.90, 890)
+    return max(t for t in ts if recall_score(y_true, p >= t) >= target)
