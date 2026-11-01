@@ -24,13 +24,14 @@ analyse fairness.
 | Sanity checks | SHAP collapses with shuffled labels; MoRF deletion drops AUC far faster than random; SHAP stable across backgrounds (0.93) and seeds (0.98) |
 | Actionable use | `CholCheck`, `HvyAlcoholConsump`, `AnyHealthcare` reflect *detection bias*. Removing them costs 0.003 AUC and changes behaviour for unscreened groups (recall 26 % → 71 % in people with no cholesterol test) at the price of more false alarms: a trade-off, not a free win |
 | Fairness | large recall gap by age (42 % for 18-44 vs 86 % for 65+), moderate by income, small by sex; calibration good in all groups; group thresholds close the gaps at a cost |
-| Plausibility | learnt directions agree with CDC risk factors for 5 of 6 features (smoking is reversed) |
+| Plausibility | learnt directions agree with CDC risk factors for 5 of 6 features (smoking is reversed). Cross-check with ADA guidelines and published studies (notebook 09, section 4): 6 of 8 features agree, cholesterol only partly, smoking contradicts the literature, and physical activity is far less important to the model than in the literature |
+| Actionable explanations | counterfactuals translated to kilos with a reference height (notebook 11): weight loss alone suffices for 91 % of flagged people but needs a median of ~14 kg (~16 % of body weight); 65 % also have an option with no weight loss (e.g. treating blood pressure) |
 
 ## Repository structure
 
 ```
 src/           data.py (download), preprocess.py (cleaning + split), evaluation.py, xai.py (grouped permutation, ALE), counterfactuals.py
-notebooks/     01-10, executed, with outputs
+notebooks/     01-11, executed, with outputs
 figures/       plots used in the report
 data/          downloaded data (git-ignored)
 models/        trained models (git-ignored, created by notebooks 02 and 06)
@@ -49,13 +50,14 @@ run_all.sh     runs everything from scratch
 | `08_sensitivity_duplicates` | what if duplicates are kept |
 | `09_plausibility` | fidelity vs plausibility against CDC risk factors |
 | `10_cost_threshold` | cost-benefit of the threshold, decision curve |
+| `11_actionable_explanations` | counterfactuals in kilos, patient and clinician views |
 
 ## How to run
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-lock.txt      # exact tested versions (Python 3.13); requirements.txt has minimum versions
-./run_all.sh                              # downloads the data and executes notebooks 01-10 in order (~30-40 min on CPU)
+./run_all.sh                              # downloads the data and executes notebooks 01-11 in order (~30-40 min on CPU)
 ```
 
 Run the notebooks **in order**: `02` creates the models used by `03-07`, `09`, `10`, and `06` creates the reduced model used by `07`, `09`, `10`.
@@ -80,6 +82,6 @@ Seeds are fixed (split seed 42, SHAP samples with fixed generators).
 - Dataset: CDC Behavioral Risk Factor Surveillance System, via the UCI Machine Learning Repository (id 891).
 - Libraries: LightGBM, scikit-learn, [SHAP](https://github.com/shap/shap) (Lundberg & Lee, 2017), [LIME](https://github.com/marcotcr/lime) (Ribeiro et al., 2016), pandas, NumPy, SciPy, matplotlib, seaborn, `ucimlrepo`.
 - Evaluation ideas: label-randomisation sanity checks (Adebayo et al., 2018); deletion / ROAR / ROAD-style evaluation (Hooker et al., 2019; Rong et al., 2022); decision curve analysis (Vickers & Elkin, 2006); course material of *Explainable AI*.
-- Medical reference for plausibility: CDC Prediabetes Risk Test scoring and CDC *Diabetes and Prediabetes* fact sheet (links in notebook 09).
+- Medical references for plausibility (full list in notebook 09, section 4): CDC Prediabetes Risk Test and *Diabetes and Prediabetes* fact sheet; ADA *Standards of Medical Care in Diabetes* 2019; Diabetes Prevention Program Research Group, NEJM 2002; Willi et al., JAMA 2007 (smoking); Baliunas et al., Diabetes Care 2009 (alcohol).
 - Counterfactual search is a small exhaustive implementation (`src/counterfactuals.py`) written for this project.
 - Code was developed with the assistance of a generative AI tool (Claude, Anthropic); the author reviewed the code and wrote the analysis.
