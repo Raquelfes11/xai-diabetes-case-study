@@ -1,3 +1,4 @@
+# System dependency (not installable with pip): on macOS, LightGBM needs OpenMP -> `brew install libomp` or `conda install -c conda-forge llvm-openmp`
 # Versions used to run the full pipeline (Python 3.13)
 numpy==2.5.3
 pandas==3.0.5

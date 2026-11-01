@@ -60,6 +60,8 @@ pip install -r requirements-lock.txt      # exact tested versions (Python 3.13);
 ./run_all.sh                              # downloads the data and executes notebooks 01-11 in order (~30-40 min on CPU)
 ```
 
+- On macOS, LightGBM needs the OpenMP runtime: `brew install libomp` (or `conda install -c conda-forge llvm-openmp`) before running.
+
 Run the notebooks **in order**: `02` creates the models used by `03-07`, `09`, `10`, and `06` creates the reduced model used by `07`, `09`, `10`.
 Seeds are fixed (split seed 42, SHAP samples with fixed generators).
 
