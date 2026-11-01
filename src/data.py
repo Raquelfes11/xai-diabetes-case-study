@@ -1,6 +1,8 @@
-"""Download and load the CDC Diabetes Health Indicators dataset (UCI id 891)."""
-from pathlib import Path
+"""
+Download and load the CDC Diabetes Health Indicators dataset (UCI id 891).
+"""
 
+from pathlib import Path
 import pandas as pd
 
 DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "cdc_diabetes.csv"
@@ -8,7 +10,9 @@ TARGET = "Diabetes_binary"
 
 
 def download(force: bool = False) -> Path:
-    """Fetch the dataset from the UCI repository and cache it as a CSV."""
+    """
+    Fetch the dataset from the UCI repository and cache it as a CSV.
+    """
     if DATA_PATH.exists() and not force:
         return DATA_PATH
     from ucimlrepo import fetch_ucirepo

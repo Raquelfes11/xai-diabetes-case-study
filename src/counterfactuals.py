@@ -1,14 +1,16 @@
-"""Exhaustive, constraint-aware counterfactual search for the screening model.
+"""
+Exhaustive, constraint-aware counterfactual search for the screening model.
 
-Only *actionable* features may change, and only in the healthy direction:
+Only actionable features may change, and only in the healthy direction:
 PhysActivity/Fruits/Veggies 0->1, Smoker/HighBP/HighChol 1->0, BMI can only go down
-(never below 18.5, at most `max_bmi_drop` units). Age, Sex, Education, Income and
+(never below 18.5, at most max_bmi_drop units). Age, Sex, Education, Income and
 self-reported health variables are immutable by construction.
 
-The search space is tiny (<= 2^6 x ~16 candidates), so we enumerate it and keep the valid
+The search space is tiny, so we enumerate it and keep the valid
 counterfactuals (prediction below the screening threshold), ranked by
 sparsity (number of changed features) and then proximity (BMI drop).
 """
+
 from itertools import product
 
 import numpy as np
@@ -18,7 +20,9 @@ HEALTHY = {"PhysActivity": 1, "Fruits": 1, "Veggies": 1, "Smoker": 0, "HighBP": 
 
 
 def find_counterfactuals(model, x: pd.Series, thr: float, bmi_floor=18.5, max_bmi_drop=15, k=3):
-    """Return up to k distinct counterfactuals for person `x` (a row of features)."""
+    """
+    Return up to k distinct counterfactuals for person x (a row of features).
+    """
     levers = [f for f, good in HEALTHY.items() if x[f] != good]
     bmi_drops = [0]
     if x["BMI"] > bmi_floor:

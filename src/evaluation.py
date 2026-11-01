@@ -1,11 +1,16 @@
-"""Metrics helpers shared by the notebooks."""
+"""
+Metrics helpers shared by the notebooks.
+"""
+
 import numpy as np
 from sklearn.metrics import (average_precision_score, brier_score_loss, f1_score,
                              precision_score, recall_score, roc_auc_score)
 
 
 def best_f1_threshold(y_true, p):
-    """Threshold that maximises F1 (choose it on the validation set, never on test)."""
+    """
+    Threshold that maximises F1 (choose it on the validation set, never on test).
+    """
     ts = np.linspace(0.05, 0.95, 91)
     return ts[int(np.argmax([f1_score(y_true, p >= t) for t in ts]))]
 
@@ -22,6 +27,8 @@ def report(y_true, p, thr):
 
 
 def threshold_for_recall(y_true, p, target=0.80):
-    """Largest threshold whose recall on (validation) data is >= target."""
+    """
+    Largest threshold whose recall on val data is >= target.
+    """
     ts = np.linspace(0.01, 0.90, 890)
     return max(t for t in ts if recall_score(y_true, p >= t) >= target)

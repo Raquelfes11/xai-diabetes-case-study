@@ -1,6 +1,6 @@
 # XAI case study: diabetes risk screening
 
-Final project for *Explainable AI* (Máster en IA). End-to-end case study: a model that predicts
+Final project for Explainable AI (Máster en IA). End-to-end case study: a model that predicts
 diabetes/prediabetes from health-survey data, explained with several XAI techniques, whose
 explanations are **evaluated, criticised and then used** to improve the model and to
 analyse fairness.
