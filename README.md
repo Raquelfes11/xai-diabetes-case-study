@@ -83,7 +83,8 @@ Seeds are fixed (split seed 42, SHAP samples with fixed generators).
 
 - Dataset: CDC Behavioral Risk Factor Surveillance System, via the UCI Machine Learning Repository (id 891).
 - Libraries: LightGBM, scikit-learn, [SHAP](https://github.com/shap/shap) (Lundberg & Lee, 2017), [LIME](https://github.com/marcotcr/lime) (Ribeiro et al., 2016), pandas, NumPy, SciPy, matplotlib, seaborn, `ucimlrepo`.
-- Evaluation ideas: label-randomisation sanity checks (Adebayo et al., 2018); deletion / ROAR / ROAD-style evaluation (Hooker et al., 2019; Rong et al., 2022); decision curve analysis (Vickers & Elkin, 2006); course material of *Explainable AI*.
+- Evaluation ideas: label-randomisation sanity checks (Adebayo et al., 2018); deletion / ROAR / ROAD-style evaluation (Hooker et al., 2019; Rong et al., 2022); decision curve analysis (Vickers & Elkin, 2006).
+- Course material: lecture slides of *Explainable Artificial Intelligence* by Jaime Pizarroso Gonzalo (ICAI), Máster en IA. The project follows Topic 1 (*XAI Taxonomy*), Topic 2 (*Transparent Models*, used for the logistic-regression baseline), Topic 3 (*Tabular XAI methods*: partial dependence, permutation importance, LIME, Shapley values/SHAP and counterfactual explanations) and Topic 7 (*Evaluation of XAI*: faithfulness versus plausibility and the sanity checks).
 - Medical references for plausibility (full list in notebook 09, section 4): CDC Prediabetes Risk Test and *Diabetes and Prediabetes* fact sheet; ADA *Standards of Medical Care in Diabetes* 2019; Diabetes Prevention Program Research Group, NEJM 2002; Willi et al., JAMA 2007 (smoking); Baliunas et al., Diabetes Care 2009 (alcohol).
 - Counterfactual search is a small exhaustive implementation (`src/counterfactuals.py`) written for this project.
 - Code was developed with the assistance of a generative AI tool (Claude, Anthropic); the author reviewed the code and wrote the analysis.
