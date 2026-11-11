@@ -15,3 +15,4 @@ tqdm
 jupyter
 nbconvert
 ipykernel
+statsmodels>=0.14

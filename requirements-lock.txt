@@ -16,3 +16,5 @@ nbformat==5.11.1
 nbconvert==7.17.2
 ipykernel==7.4.0
 jupyter
+patsy==1.0.3
+statsmodels==0.15.0

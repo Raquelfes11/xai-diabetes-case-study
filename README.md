@@ -24,14 +24,15 @@ analyse fairness.
 | Sanity checks | SHAP collapses with shuffled labels; MoRF deletion drops AUC far faster than random; SHAP stable across backgrounds (0.93) and seeds (0.98) |
 | Actionable use | `CholCheck`, `HvyAlcoholConsump`, `AnyHealthcare` reflect *detection bias*. Removing them costs 0.003 AUC and changes behaviour for unscreened groups (recall 26 % → 71 % in people with no cholesterol test) at the price of more false alarms: a trade-off, not a free win |
 | Fairness | large recall gap by age (42 % for 18-44 vs 86 % for 65+), moderate by income, small by sex; calibration good in all groups; group thresholds close the gaps at a cost |
-| Plausibility | learnt directions agree with CDC risk factors for 5 of 6 features (smoking is reversed). Cross-check with ADA guidelines and published studies (notebook 09, section 4): 6 of 8 features agree, cholesterol only partly, smoking contradicts the literature, and physical activity is far less important to the model than in the literature |
+| Plausibility | learnt directions agree with CDC risk factors for 5 of 6 features (smoking is reversed). Cross-check with ADA guidelines and published studies (notebook 09, section 4): 6 of 8 features agree, cholesterol only partly, smoking has the opposite sign and physical activity is far less important to the model than in the literature. Notebook 13 shows that both are largely explained by conditioning on self-reported health and BMI: smoking is positive in the raw data (OR 1.29) and the sign only reverses once health status is controlled for |
+| Uncertainty | 95 % bootstrap CIs and five repeated splits (notebook 12): LightGBM ROC-AUC 0.818 (0.812-0.824); age recall gap 0.43 (0.38-0.48), income gap 0.18 (0.155-0.205); seed-to-seed sd of AUC 0.002. For people with no cholesterol test (35 positives) the recall gain from removing the shortcut features is large but uncertain (+0.46, CI 0.29-0.63) |
 | Actionable explanations | counterfactuals translated to kilos with a reference height (notebook 11): weight loss alone suffices for 91 % of flagged people but needs a median of ~14 kg (~16 % of body weight); 65 % also have an option with no weight loss (e.g. treating blood pressure) |
 
 ## Repository structure
 
 ```
 src/           data.py (download), preprocess.py (cleaning + split), evaluation.py, xai.py (grouped permutation, ALE), counterfactuals.py
-notebooks/     01-11, executed, with outputs
+notebooks/     01-13, executed, with outputs
 figures/       plots used in the report
 data/          downloaded data (git-ignored)
 models/        trained models (git-ignored, created by notebooks 02 and 06)
@@ -51,13 +52,15 @@ run_all.sh     runs everything from scratch
 | `09_plausibility` | fidelity vs plausibility against CDC risk factors |
 | `10_cost_threshold` | cost-benefit of the threshold, decision curve |
 | `11_actionable_explanations` | counterfactuals in kilos, patient and clinician views |
+| `12_uncertainty` | bootstrap confidence intervals and repeated splits |
+| `13_hypothesis_checks` | tests why smoking looks protective and physical activity unimportant |
 
 ## How to run
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-lock.txt      # exact tested versions (Python 3.13); requirements.txt has minimum versions
-./run_all.sh                              # downloads the data and executes notebooks 01-11 in order (~30-40 min on CPU)
+./run_all.sh                              # downloads the data and executes notebooks 01-13 in order (~40-50 min on CPU)
 ```
 
 - On macOS, LightGBM needs the OpenMP runtime: `brew install libomp` (or `conda install -c conda-forge llvm-openmp`) before running.
@@ -75,8 +78,9 @@ Seeds are fixed (split seed 42, SHAP samples with fixed generators).
 ## Limitations
 
 - The label is *diagnosed, self-reported* diabetes: undiagnosed cases look healthy, which is what the artefact features exploit. Interpreting `CholCheck` as detection bias is a plausible hypothesis, not something the data prove.
-- One train/validation/test split; some subgroups have few positives (e.g. young people).
+- Uncertainty: intervals come from a bootstrap of the test set and from five repeated splits of the same 229,474 rows (notebook 12), so they do not cover a different population. Some subgroups have few positives (young people, ~350; people with no cholesterol test, 35), and their estimates are wide.
 - SHAP uses a 100-row background; LIME and SHAP are not directly comparable (probability vs log-odds).
+- The explanations for smoking and physical activity (notebook 13) are descriptive: nested regressions and ablations show where the effects are absorbed, but cannot say whether health status lies on the causal path.
 - Counterfactuals describe what changes the **model output**, not a person's real risk; the explanation of a faithful model can still mislead if read causally.
 
 ## References and credits
