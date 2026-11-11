@@ -47,5 +47,5 @@ def find_counterfactuals(model, x: pd.Series, thr: float, bmi_floor=18.5, max_bm
     out = pd.DataFrame({"changed": [m[0] for m in meta], "bmi_drop": [m[1] for m in meta], "p_after": p})
     out["n_changed"] = out["changed"].map(len) + (out["bmi_drop"] > 0)
     out = out[out.p_after < thr].sort_values(["n_changed", "bmi_drop", "p_after"])
-    out = out.drop_duplicates("changed")          # diversity: one option per set of binary changes
+    out = out.drop_duplicates("changed")
     return out.head(k).reset_index(drop=True)
