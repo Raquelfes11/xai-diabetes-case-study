@@ -20,7 +20,7 @@ analyse fairness.
 | Model (test, duplicates removed) | LightGBM ROC-AUC 0.818, PR-AUC 0.442 (logistic regression 0.807 / 0.404); no overfitting (train 0.825), well calibrated |
 | Operating point | threshold chosen on validation for recall ≥ 80 %: recall 0.80, precision 0.31, 39 % of people flagged. Implies a missed case is valued ≈ 7 confirmatory tests (notebook 10) |
 | Global explanations | `GenHlth`, `Age`, `BMI`, `HighBP`, `HighChol` dominate; permutation, SHAP and logistic coefficients agree (Spearman 0.94-0.96); lifestyle variables barely matter |
-| Local explanations | SHAP vs LIME agree little (top-5 Jaccard 0.47) although LIME is stable across seeds; contrafactuals: mostly "treat blood pressure / cholesterol" or lose BMI |
+| Local explanations | SHAP vs LIME agree little (top-5 Jaccard 0.47) although LIME is stable across seeds; counterfactuals: mostly "treat blood pressure / cholesterol" or lose BMI |
 | Sanity checks | SHAP collapses with shuffled labels; MoRF deletion drops AUC far faster than random; SHAP stable across backgrounds (0.93) and seeds (0.98) |
 | Actionable use | `CholCheck`, `HvyAlcoholConsump`, `AnyHealthcare` reflect *detection bias*. Removing them costs 0.003 AUC and changes behaviour for unscreened groups (recall 26 % → 71 % in people with no cholesterol test) at the price of more false alarms: a trade-off, not a free win |
 | Fairness | large recall gap by age (42 % for 18-44 vs 86 % for 65+), moderate by income, small by sex; calibration good in all groups; group thresholds close the gaps at a cost |
@@ -86,7 +86,7 @@ Seeds are fixed (split seed 42, SHAP samples with fixed generators).
 ## References and credits
 
 - Dataset: CDC Behavioral Risk Factor Surveillance System, via the UCI Machine Learning Repository (id 891).
-- Libraries: LightGBM, scikit-learn, [SHAP](https://github.com/shap/shap) (Lundberg & Lee, 2017), [LIME](https://github.com/marcotcr/lime) (Ribeiro et al., 2016), pandas, NumPy, SciPy, matplotlib, seaborn, `ucimlrepo`.
+- Libraries: LightGBM, scikit-learn, [SHAP](https://github.com/shap/shap) (Lundberg & Lee, 2017), [LIME](https://github.com/marcotcr/lime) (Ribeiro et al., 2016), pandas, NumPy, SciPy, statsmodels, matplotlib, seaborn, `ucimlrepo`.
 - Evaluation ideas: label-randomisation sanity checks (Adebayo et al., 2018); deletion / ROAR / ROAD-style evaluation (Hooker et al., 2019; Rong et al., 2022); decision curve analysis (Vickers & Elkin, 2006).
 - Course material: lecture slides of *Explainable Artificial Intelligence* by Jaime Pizarroso Gonzalo (ICAI), Máster en IA. The project follows Topic 1 (*XAI Taxonomy*), Topic 2 (*Transparent Models*, used for the logistic-regression baseline), Topic 3 (*Tabular XAI methods*: partial dependence, permutation importance, LIME, Shapley values/SHAP and counterfactual explanations) and Topic 7 (*Evaluation of XAI*: faithfulness versus plausibility and the sanity checks).
 - Medical references for plausibility (full list in notebook 09, section 4): CDC Prediabetes Risk Test and *Diabetes and Prediabetes* fact sheet; ADA *Standards of Medical Care in Diabetes* 2019; Diabetes Prevention Program Research Group, NEJM 2002; Willi et al., JAMA 2007 (smoking); Baliunas et al., Diabetes Care 2009 (alcohol).
